@@ -27,13 +27,14 @@ export default function LoginForm() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
-    setErrorMessage(null); // Limpiar error previo
+    setErrorMessage(null); 
 
     try {
       const response = await login(values.email, values.password);
 
       if (response.status === 200) {
         console.log("✅ Inicio de sesión exitoso:", response.data);
+        console.log("🔑 Token de acceso:", response.data.token);
         return;
       }
 

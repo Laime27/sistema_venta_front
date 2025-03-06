@@ -1,10 +1,8 @@
-import axios from "axios";
-
-const URL = "http://api_sistemaventa.test/api/login";
+import axios from "@/libs/axios";
 
 export const login = async (email: string, password: string) => {
   try {
-    const response = await axios.post(URL, { email, password });
+    const response = await axios.post('/api/login', { email, password });
     return response;
 
   } catch (error: any) {
@@ -14,3 +12,5 @@ export const login = async (email: string, password: string) => {
     throw new Error("Error de conexión con el servidor");
   }
 };
+
+
