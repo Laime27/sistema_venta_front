@@ -1,21 +1,29 @@
-
-import Login from '@/modulos/login/page'
-import Dashboard from '@/modulos/layouts/dashboard'
-
+import Login from "@/modulos/login/page";
+import Dashboard from "@/modulos/layouts/dashboard";
+import Categorias from "@/modulos/categorias/page";
+import ProtectedRoute from "./ProtectedRoute";
 
 export const routes = [
     {
         path: "/",
-        element: <Login />
+        element: <Login />,
     },
     {
         path: "/dashboard",
-        element: <Dashboard />,
-        children:[
+        element: (
+            <ProtectedRoute>
+                <Dashboard />
+            </ProtectedRoute>
+        ),
+        children: [
             {
-                
-                
+                path: "/dashboard/categorias",
+                element: (
+                    <ProtectedRoute>
+                        <Categorias />
+                    </ProtectedRoute>
+                ),
             },
-    ]
-    }
+        ],
+    },
 ];

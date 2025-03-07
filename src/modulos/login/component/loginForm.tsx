@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useNavigate } from "react-router";
 
 const formSchema = z.object({
   email: z.string().email({ message: "Correo electrónico inválido" }),
@@ -17,8 +18,10 @@ const formSchema = z.object({
 });
 
 export default function LoginForm() {
+
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -27,14 +30,18 @@ export default function LoginForm() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
-    setErrorMessage(null); 
 
     try {
       const response = await login(values.email, values.password);
 
       if (response.status === 200) {
-        console.log("✅ Inicio de sesión exitoso:", response.data);
-        console.log("🔑 Token de acceso:", response.data.token);
+        
+        const expireDate = new Date();
+        expireDate.setTime(expireDate.getTime() + (60 * 60 * 1000)); 
+        document.cookie = `token=${response.data.token}; expires=${expireDate.toUTCString()}; path=/;`;
+
+        navigate("/dashboard/categorias");
+
         return;
       }
 
